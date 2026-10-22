@@ -2091,8 +2091,11 @@ final class MetalTerminalRenderer {
                                                iconHeight: policyIconHeight)
                         let basePos = CGPoint(x: lineOrigin.x + (cellWidth * CGFloat(glyphColumn)) + intraCluster + fit.dx,
                                               y: lineOrigin.y + yOffset + ctPos.y + fit.dy)
-                        let pxX = basePos.x * scale + entry.bearing.x * fit.scaleX
-                        let pxY = basePos.y * scale + entry.bearing.y * fit.scaleY
+                        // On whole pixels: the glyph was rasterized at a whole pixel, and a quad
+                        // between two pixels is sampled across both (a blur) when the cell is not a
+                        // whole number of pixels (a scale that is not a whole number).
+                        let pxX = (basePos.x * scale + entry.bearing.x * fit.scaleX).rounded()
+                        let pxY = (basePos.y * scale + entry.bearing.y * fit.scaleY).rounded()
 
                         let x0 = pxX
                         let y0 = pxY
@@ -3549,8 +3552,8 @@ final class MetalTerminalRenderer {
                                            ? CTFontGetAscent(context.fonts.normal as CTFont) * scale : 0)
                 let basePos = CGPoint(x: lineOrigin.x + cellWidth * doublePosition * CGFloat(cursor.visualCol) + fit.dx * doublePosition,
                                       y: lineOrigin.y + yOffset + ctPos.y + fit.dy)
-                let pxX = basePos.x * scale + entry.bearing.x * fit.scaleX
-                let pxY = basePos.y * scale + entry.bearing.y * fit.scaleY
+                let pxX = (basePos.x * scale + entry.bearing.x * fit.scaleX).rounded()
+                let pxY = (basePos.y * scale + entry.bearing.y * fit.scaleY).rounded()
                 let x0 = Float(pxX)
                 let y0 = Float(pxY)
                 let x1 = x0 + Float(entry.size.width * fit.scaleX)

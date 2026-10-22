@@ -701,7 +701,10 @@ open class TerminalView: NSView, NSUserInterfaceValidations, TerminalDelegate {
     }
 
     func metalRenderingScaleFactor() -> CGFloat {
-        max(1, metalScaleFactorOverride ?? backingScaleFactor())
+        // An override may be under 1: a view shown smaller than its points (a zoomed-out canvas
+        // on a 1x screen) draws with the pixels it covers, not twice as many scaled down.
+        if let override = metalScaleFactorOverride { return max(0.1, override) }
+        return max(1, backingScaleFactor())
     }
 
     /// The value `usesMetalLayerSurface` starts at. `SWIFTTERM_METAL_LAYER=0`
