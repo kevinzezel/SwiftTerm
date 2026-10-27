@@ -2039,7 +2039,7 @@ open class TerminalView: NSView, NSUserInterfaceValidations, TerminalDelegate {
         return true
     }
 
-    public override func keyDown(with event: NSEvent) {
+    open override func keyDown(with event: NSEvent) {
         kittyComposingKeyCode = nil
         if !event.isARepeat {
             kittyKeysWithReportedPress.remove(event.keyCode)
@@ -4127,7 +4127,7 @@ open class TerminalView: NSView, NSUserInterfaceValidations, TerminalDelegate {
     }
     
     /* Legacy wheel handler superseded by the precise-scroll implementation below.
-    public override func scrollWheel(with event: NSEvent) {
+    open override func scrollWheel(with event: NSEvent) {
         if event.deltaY == 0 {
             return
         }
@@ -4221,7 +4221,7 @@ open class TerminalView: NSView, NSUserInterfaceValidations, TerminalDelegate {
     private static let logsMouseInput =
         ProcessInfo.processInfo.environment["SWIFTTERM_MOUSE_LOG"] == "1"
 
-    public override func scrollWheel(with event: NSEvent) {
+    open override func scrollWheel(with event: NSEvent) {
         // Preserves the previous `deltaY == 0` early exit, restated against the
         // delta this method now reads. Without it a zero delta would fall into
         // the non-precise branch below and be turned into a spurious -1 line.
