@@ -3537,6 +3537,19 @@ open class TerminalView: NSView, NSUserInterfaceValidations, TerminalDelegate {
         return (Position(col: colValue, row: rowValue), toInt (point))
     }
     
+    /// The program asked for mouse reports (tmux with `mouse on`, vim with `mouse=a`) and reports are allowed. A host
+    /// that selects on its own while the program has the mouse (Octopus: a drag in tmux went to the server, a step per
+    /// round trip) asks this before taking a press.
+    public var reportsMouse: Bool {
+        withTerminal { terminal in allowMouseReporting && terminal.mouseMode != .off }
+    }
+
+    /// Sends `event` (a press or a release) to the program as a mouse report, as `mouseDown`/`mouseUp` do when the
+    /// program has the mouse: a click the host kept for its own selection goes to the program after all.
+    public func reportMouse(_ event: NSEvent) {
+        sharedMouseEvent(with: event)
+    }
+
     private func sharedMouseEvent (with event: NSEvent)
     {
         withTerminal { terminal in
